@@ -17,5 +17,6 @@ func TestPcapFileRead(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	handle.Close()
+	data, err := handle.ReadPacketData()
+	fmt.Println("data=", data)
 }

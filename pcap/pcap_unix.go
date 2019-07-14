@@ -11,6 +11,10 @@ package pcap
 #include <stdlib.h>
 #include <pcap.h>
 #include <stdint.h>
+
+int pcap_next_ex_wrapper(pcap_t *p, uintptr_t pkt_hdr, uintptr_t pkt_data) {
+  return pcap_next_ex(p, (struct pcap_pkthdr**)(pkt_hdr), (const u_char**)(pkt_data));
+}
 */
 import "C"
 import (
@@ -87,4 +91,8 @@ func (p *Pcap) pcapStats() (*Stats, error) {
 		PacketsDropped:   int(cstats.ps_drop),
 		PacketsIfDropped: int(cstats.ps_ifdrop),
 	}, nil
+}
+
+func (p *Pcap) pcapNextPacketEx() NextError {
+	return NextError(C.pcap_next_ex_wrapper(p.cptr, C.uintptr_t(uintptr(unsafe.Pointer(&p.pkthdr))), C.uintptr_t(uintptr(unsafe.Pointer(&p.bufptr)))))
 }

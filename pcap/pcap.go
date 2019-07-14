@@ -1,6 +1,8 @@
 package pcap
 
 import (
+	"fmt"
+	"strconv"
 	"time"
 	"unsafe"
 )
@@ -75,8 +77,39 @@ func OpenOffline(file string) (handle *Pcap, err error) {
 	return
 }
 
+// NextError is the return code from a call to Next.
+type NextError int32
+
+// NextError implements the error interface.
+func (n NextError) Error() string {
+	switch n {
+	case NextErrorOk:
+		return "OK"
+	case NextErrorTimeoutExpired:
+		return "Timeout Expired"
+	case NextErrorReadError:
+		return "Read Error"
+	case NextErrorNoMorePackets:
+		return "No More Packets In File"
+	case NextErrorNotActivated:
+		return "Not Activated"
+	}
+	return strconv.Itoa(int(n))
+}
+
+// NextError values.
+const (
+	NextErrorOk             NextError = 1
+	NextErrorTimeoutExpired NextError = 0
+	NextErrorReadError      NextError = -1
+	// NextErrorNoMorePackets is returned when reading from a file (OpenOffline) and
+	// EOF is reached.  When this happens, Next() returns io.EOF instead of this.
+	NextErrorNoMorePackets NextError = -2
+	NextErrorNotActivated  NextError = -3
+)
+
 func (p *Pcap) ReadPacketData() (data []byte, err error) {
-	//err = p.getNextBufPtrLocked(&ci)
+	err = p.getNextBufPtr()
 	if err == nil {
 		//data = make([]byte, ci.CaptureLength)
 		data = make([]byte, 1024)
@@ -84,4 +117,19 @@ func (p *Pcap) ReadPacketData() (data []byte, err error) {
 	}
 
 	return
+}
+
+func (p *Pcap) getNextBufPtr() error {
+	result := p.pcapNextPacketEx()
+	fmt.Println("result=", result)
+
+	switch result {
+	case NextErrorOk:
+		sec := p.pkthdr.getSec()
+		caplen := p.pkthdr.getCaplen()
+		length := p.pkthdr.getLen()
+
+		fmt.Printf("sec:%v, caplen=%d, len=%d\n", sec, caplen, length)
+	}
+	return nil
 }

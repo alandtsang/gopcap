@@ -16,3 +16,7 @@ type packet struct {
 	transport   layers.TransportLayer
 	application layers.ApplicationLayer
 }
+
+func (p *packet) Data() []byte {
+	return p.data
+}
