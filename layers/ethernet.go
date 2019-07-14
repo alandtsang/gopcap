@@ -24,7 +24,7 @@ func (eth *Ethernet) DecodeFromBytes(data []byte) error {
 	}
 	eth.DstMAC = net.HardwareAddr(data[0:6])
 	eth.SrcMAC = net.HardwareAddr(data[6:12])
-	eth.EthernetType = EthernetType(binary.BigEndian.Uint16(data[12:14]))
+	eth.EthernetType = binary.BigEndian.Uint16(data[12:14])
 	//eth.BaseLayer = BaseLayer{data[:14], data[14:]}
 	eth.Length = 0
 	fmt.Printf("%v\n", eth)

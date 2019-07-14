@@ -1,5 +1,7 @@
 package pcap
 
+import "github.com/alandtsang/gopcap/layers"
+
 type Packet interface {
 	Data() []byte
 }
@@ -9,8 +11,8 @@ type packet struct {
 	data []byte
 
 	// Pointers to the various important layers
-	link        LinkLayer
-	network     NetworkLayer
-	transport   TransportLayer
-	application ApplicationLayer
+	link        layers.LinkLayer
+	network     layers.NetworkLayer
+	transport   layers.TransportLayer
+	application layers.ApplicationLayer
 }

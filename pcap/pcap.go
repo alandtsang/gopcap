@@ -1,11 +1,8 @@
 package pcap
 
 import (
-	"runtime"
 	"time"
 	"unsafe"
-
-	"github.com/google/gopacket"
 )
 
 type Pcap struct {
@@ -78,16 +75,13 @@ func OpenOffline(file string) (handle *Pcap, err error) {
 	return
 }
 
-func (p *Pcap) ReadPacketData() (data []byte, ci gopacket.CaptureInfo, err error) {
-	p.mu.Lock()
-	err = p.getNextBufPtrLocked(&ci)
+func (p *Pcap) ReadPacketData() (data []byte, err error) {
+	//err = p.getNextBufPtrLocked(&ci)
 	if err == nil {
-		data = make([]byte, ci.CaptureLength)
+		//data = make([]byte, ci.CaptureLength)
+		data = make([]byte, 1024)
 		copy(data, (*(*[1 << 30]byte)(unsafe.Pointer(p.bufptr)))[:])
 	}
-	p.mu.Unlock()
-	if err == NextErrorTimeoutExpired {
-		runtime.Gosched()
-	}
+
 	return
 }

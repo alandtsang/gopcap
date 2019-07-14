@@ -18,9 +18,9 @@ func (udp *UDP) DecodeFromBytes(data []byte) error {
 	if len(data) < 8 {
 		return fmt.Errorf("Invalid UDP header. Length %d less than 8", len(data))
 	}
-	udp.SrcPort = UDPPort(binary.BigEndian.Uint16(data[0:2]))
+	udp.SrcPort = binary.BigEndian.Uint16(data[0:2])
 	udp.sPort = data[0:2]
-	udp.DstPort = UDPPort(binary.BigEndian.Uint16(data[2:4]))
+	udp.DstPort = binary.BigEndian.Uint16(data[2:4])
 	udp.dPort = data[2:4]
 	udp.Length = binary.BigEndian.Uint16(data[4:6])
 	udp.Checksum = binary.BigEndian.Uint16(data[6:8])
