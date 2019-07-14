@@ -3,6 +3,8 @@ package pcap
 import (
 	"fmt"
 	"testing"
+
+	"github.com/alandtsang/gopcap/layers"
 )
 
 func TestPcapFileRead(t *testing.T) {
@@ -18,5 +20,9 @@ func TestPcapFileRead(t *testing.T) {
 	}
 
 	data, err := handle.ReadPacketData()
-	fmt.Println("data=", data)
+	//fmt.Println("data=", data)
+
+	//pkt := NewPacket(data)
+	//fmt.Println("pkt=", pkt)
+	layers.DecodeEthernet(data)
 }

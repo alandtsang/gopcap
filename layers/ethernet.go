@@ -27,7 +27,7 @@ func (eth *Ethernet) DecodeFromBytes(data []byte) error {
 	eth.EthernetType = binary.BigEndian.Uint16(data[12:14])
 	//eth.BaseLayer = BaseLayer{data[:14], data[14:]}
 	eth.Length = 0
-	fmt.Printf("%v\n", eth)
+	fmt.Printf("%#v\n", eth)
 	/*
 		if eth.EthernetType < 0x0600 {
 			eth.Length = uint16(eth.EthernetType)
@@ -41,4 +41,10 @@ func (eth *Ethernet) DecodeFromBytes(data []byte) error {
 		}
 	*/
 	return nil
+}
+
+func DecodeEthernet(data []byte) error {
+	eth := &Ethernet{}
+	err := eth.DecodeFromBytes(data)
+	return err
 }
