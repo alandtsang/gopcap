@@ -25,4 +25,6 @@ func TestPcapFileRead(t *testing.T) {
 	//pkt := NewPacket(data)
 	//fmt.Println("pkt=", pkt)
 	layers.DecodeEthernet(data)
+	layers.DecodeIPv4(data[14:])
+	layers.DecodeTCP(data[34:])
 }
