@@ -39,3 +39,14 @@ func (udp *UDP) DecodeFromBytes(data []byte) error {
 	}
 	return nil
 }
+
+func DecodeUDP(data []byte) error {
+	udp := &UDP{}
+	err := udp.DecodeFromBytes(data)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("\n--- UDP ---\n")
+	fmt.Printf("%#v\n", udp)
+	return nil
+}
