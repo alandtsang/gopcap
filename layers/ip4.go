@@ -98,3 +98,14 @@ func (ip *IPv4) DecodeFromBytes(data []byte) error {
 	}
 	return nil
 }
+
+func DecodeIPv4(data []byte) error {
+	ip := &IPv4{}
+	err := ip.DecodeFromBytes(data)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("\n--- IPv4 ---\n")
+	fmt.Printf("%#v\n", ip)
+	return nil
+}
